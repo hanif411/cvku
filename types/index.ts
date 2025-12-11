@@ -24,6 +24,7 @@ export type TemplateStyle = {
 };
 
 export type ResumeData = {
+  certifications: certifications[];
   personalInfo: {
     name: string;
     title: string;
@@ -34,4 +35,14 @@ export type ResumeData = {
   experience: Experience[];
   education: Education[];
   skills: string[];
+};
+
+export type certifications = {
+  id: number;
+  resume_id: number;
+  name: string;
+  issuer: string;
+  issue_date: number;
+  expiration_date: number;
+  description: string;
 };

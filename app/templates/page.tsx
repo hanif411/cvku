@@ -17,19 +17,20 @@ const templates: Template[] = [
     id: "creative",
     name: "Template Kreatif",
     description: "Desain modern & menarik, ideal untuk industri kreatif.",
-    image: "/images/template-creative.png",
+    image: "/Cvats.png",
   },
   {
     id: "professional",
     name: "Template Profesional",
     description: "Klasik & rapi, cocok untuk karir korporat.",
-    image: "/images/template-professional.png",
+    image: "/Cv.png",
+    
   },
   {
     id: "minimalist",
     name: "Template Minimalis",
     description: "Bersih & fokus, menonjolkan esensi terbaik Anda.",
-    image: "/images/template-minimalist.png",
+    image: "/CvMinimalis.png",
   },
 ];
 
@@ -57,18 +58,15 @@ const TemplatesPage: React.FC = () => {
             <Card
               key={template.id}
               className="flex flex-col h-full shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-              <CardHeader className="p-0">
-                <div className="w-full h-80 bg-gray-100 flex items-center justify-center text-gray-400 text-sm overflow-hidden border-b border-gray-200">
-                  <div className="w-[180px] h-[255px] bg-white border border-gray-300 shadow-lg flex flex-col items-center justify-center text-xs text-gray-600 p-4">
-                    <p className="font-semibold text-sm mb-1 text-center">
-                      {template.name}
-                    </p>
-                    <p className="text-center text-[10px] italic">
-                      Klik Pilih untuk memulai
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
+            <CardHeader className="p-0">
+              <div className="w-full h-80 overflow-hidden border-b border-gray-200">
+                <img
+                  src={template.image}
+                  alt={template.name}
+                  className="w-full h-full object-cover object-top"/>
+              </div>
+            </CardHeader>
+
               <CardContent className="flex-grow pt-4">
                 <CardTitle className="text-xl font-semibold mb-2">
                   {template.name}
