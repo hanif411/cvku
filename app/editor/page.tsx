@@ -1,19 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-// app/editor/page.tsx (Revisi)
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import {
-  ResumeData,
-  TemplateStyle,
-  Experience,
-  Education,
-  certifications,
-} from "@/types/index";
+import { ResumeData, TemplateStyle } from "@/types/index";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
-import { FileDown } from "lucide-react";
+import { FileDown, Eye, X } from "lucide-react";
 import StepPersonalInfo from "@/components/editor-steps/StepPersonalInfo";
 import StepExperience from "@/components/editor-steps/StepExperience";
 import StepEducation from "@/components/editor-steps/StepEducation";
@@ -21,164 +12,14 @@ import StepSkills from "@/components/editor-steps/StepSkills";
 import StepCertifications from "@/components/editor-steps/StepFormTambahan";
 
 import { downloadPDF } from "@/lib/Downloadpdf";
-
-const PlaceholderStep: React.FC<{ name: string }> = ({ name }) => (
-  <div className="p-6 text-center text-gray-500">
-    <h3 className="text-xl font-semibold">Langkah {name}</h3>
-    <p>
-      Akan segera dibuat. Silakan klik tombol *Continue* untuk melihat preview.
-    </p>
-  </div>
-);
-
-const CVPreview: React.FC<{ data: ResumeData; styles: TemplateStyle }> = ({
-  data,
-  styles,
-}) => {
-  const previewStyle: React.CSSProperties = {
-    fontFamily: styles.fontFamily,
-  };
-
-  return (
-    <div className="p-4 bg-gray-100 h-full flex justify-center items-start overflow-y-auto">
-      <div
-        className="w-[210mm] min-h-[297mm] bg-white shadow-xl p-8 transition-all duration-300"
-        style={previewStyle}
-      >
-        <div
-          className="pb-2 mb-4 border-b-2"
-          style={{ borderColor: styles.primaryColor }}
-        >
-          <h1
-            className="text-3xl font-bold"
-            style={{ color: styles.primaryColor }}
-          >
-            {data.personalInfo.name || "Nama Anda"}
-          </h1>
-          <p className="text-xl text-gray-600">
-            {data.personalInfo.title || "Jabatan Impian"}
-          </p>
-          <h2>
-            <p className="text-sm text-gray-600 mt-1">
-              {data.personalInfo.email || "Email anda"} |{" "}
-              {data.personalInfo.phone || "No. Telepon anda"}
-            </p>
-          </h2>
-        </div>
-
-        <h3
-          className="text-lg font-semibold mb-2 mt-4"
-          style={{ color: styles.primaryColor }}
-        >
-          Ringkasan
-        </h3>
-        <p className="text-sm text-gray-700 whitespace-pre-wrap">
-          {data.personalInfo.summary ||
-            "Tulis ringkasan profesional Anda di sini."}
-        </p>
-
-        <h3
-          className="text-lg font-semibold mb-2 mt-4"
-          style={{ color: styles.primaryColor }}
-        >
-          Skills
-        </h3>
-
-        <div className="flex flex-wrap gap-2">
-          {data.skills.map((skill, i) => (
-            <span
-              key={i}
-              className="px-3 py-1 text-xs bg-gray-200 rounded-full"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-
-        {data.experience.length > 0 && (
-          <>
-            <h3
-              className="text-lg font-semibold mb-2 mt-4"
-              style={{ color: styles.primaryColor }}
-            >
-              Pengalaman
-            </h3>
-            {data.experience.map((exp) => (
-              <div key={exp.id} className="mb-2">
-                <p className="flex gap-4 text-sm text-gray-700">
-                  <span>
-                    {exp.jobTitle} - {exp.company}
-                  </span>
-                  <span>
-                    {exp.startDate} - {exp.endDate}
-                  </span>
-                </p>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                  {exp.description}
-                </p>
-              </div>
-            ))}
-          </>
-        )}
-
-        {data.education.length > 0 && (
-          <>
-            <h3
-              className="text-lg font-semibold mb-2 mt-4"
-              style={{ color: styles.primaryColor }}
-            >
-              Pendidikan
-            </h3>
-            {data.education.map((exp) => (
-              <div key={exp.id} className="mb-2">
-                <p className="text-sm text-gray-700">
-                  {exp.institution} {exp.startDate} - {exp.endDate}
-                </p>
-                <p className="text-sm text-gray-700">{exp.degree}</p>
-              </div>
-            ))}
-          </>
-        )}
-        {data.certifications.length > 0 && (
-          <>
-            <h3
-              className="text-lg font-semibold mb-2 mt-4"
-              style={{ color: styles.primaryColor }}
-            >
-              Sertifikasi
-            </h3>
-            {data.certifications.map((cert) => (
-              <div key={cert.id} className="mb-2">
-                <p className="text-sm text-gray-700 font-medium">
-                  {cert.name}
-                </p>
-                <p className="text-xs text-gray-600">
-                  {cert.issuer} | Dikeluarkan: {cert.issue_date} 
-                  {/* Perhatikan: Jika expiration_date tidak wajib/tidak ada, Anda bisa menggunakan ternary operator */}
-                  {cert.expiration_date ? ` | Berlaku hingga: ${cert.expiration_date}` : ''}
-                </p>
-                {cert.description && (
-                  <p className="text-xs text-gray-700 mt-1 whitespace-pre-wrap">
-                    {cert.description}
-                  </p>
-                )}
-              </div>
-            ))}
-          </>
-        )}
-
-        <div className="mt-8 text-center text-xs text-gray-400">
-          Preview Template: {styles.fontFamily} | Warna: {styles.primaryColor}
-        </div>
-      </div>
-    </div>
-  );
-};
+import EditorSidebar from "@/components/editor/Sidebar";
+import { CVAts } from "@/components/templates-cv/CvAts";
+// import { CVAts } from "@/components/templates-cv/CvProfessional";
 
 const STEPS = [
   {
     id: 1,
-    name: "Personal Info",
+    name: "Data Diri",
     component: (props: {
       data: ResumeData;
       setData: React.Dispatch<React.SetStateAction<ResumeData>>;
@@ -186,7 +27,7 @@ const STEPS = [
   },
   {
     id: 2,
-    name: "Experience",
+    name: "Pengalaman",
     component: (props: {
       data: ResumeData;
       setData: React.Dispatch<React.SetStateAction<ResumeData>>;
@@ -194,7 +35,7 @@ const STEPS = [
   },
   {
     id: 3,
-    name: "Education",
+    name: "Pendidikan",
     component: (props: {
       data: ResumeData;
       setData: React.Dispatch<React.SetStateAction<ResumeData>>;
@@ -202,105 +43,108 @@ const STEPS = [
   },
   {
     id: 4,
-    name: "Skills",
+    name: "Keahlian",
     component: (props: {
       data: ResumeData;
       setData: React.Dispatch<React.SetStateAction<ResumeData>>;
     }) => <StepSkills {...props} />,
   },
- {
-  id: 5,
-  name: "certifications",
-  component: (props: {
-    data: ResumeData;
-    setData: React.Dispatch<React.SetStateAction<ResumeData>>;
-  }) => (
-    <StepCertifications
-      data={props.data.certifications} // array certifications
-      setData={(newCerts) => props.setData((prev) => ({ ...prev, certifications: newCerts }))} onNext={function (): void {
-        throw new Error("Function not implemented.");
-      } } onBack={function (): void {
-        throw new Error("Function not implemented.");
-      } }    />
-  ),
-}
-
+  {
+    id: 5,
+    name: "Sertifikat",
+    component: (props: {
+      data: ResumeData;
+      setData: React.Dispatch<React.SetStateAction<ResumeData>>;
+    }) => (
+      <StepCertifications
+        data={props.data.certifications}
+        setData={(newCerts) =>
+          props.setData((prev) => ({ ...prev, certifications: newCerts }))
+        }
+        onNext={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        onBack={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+    ),
+  },
 ];
 
-const initialResumeData: ResumeData = {
+const defaultResumeData: ResumeData = {
   personalInfo: {
-    name: "Hanif Sholihin",
-    title: "Marketing Manager",
-    email: "hanif@email.com",
-    phone: "+6281",
-    summary: "Hasil didorong oleh Marketing Manager dengan keahlian dalam perencanaan strategis, konten kreatif, dan media sosial, fokus pada tujuan berbasis data.",
+    name: "",
+    title: "",
+    email: "",
+    phone: "",
+    summary: "",
   },
   experience: [],
   education: [],
   skills: [],
   certifications: [],
-  
 };
 
 const initialTemplateStyle: TemplateStyle = {
-  primaryColor: "#F59E0B",
+  primaryColor: "#000",
   fontFamily: "Roboto, sans-serif",
   layoutVariant: "classic",
+};
+
+const getInitialData = (): ResumeData => {
+  if (typeof window !== "undefined") {
+    // Pastikan kode berjalan di client-side
+    const savedData = localStorage.getItem("resumeDataDraft");
+    if (savedData) {
+      try {
+        return JSON.parse(savedData) as ResumeData;
+      } catch (error) {
+        console.error("Error parsing resume data from localStorage:", error); // Jika gagal parse, kembalikan data default
+        return defaultResumeData;
+      }
+    }
+  }
+  return defaultResumeData;
 };
 
 const EditorPage: React.FC = () => {
   const searchParams = useSearchParams();
   const templateId = searchParams.get("template") || "default";
 
-  const [resumeData, setResumeData] =
-    useState<ResumeData>(initialResumeData);
+  const [resumeData, setResumeData] = useState<ResumeData>(getInitialData);
   const [templateStyles, setTemplateStyles] =
     useState<TemplateStyle>(initialTemplateStyle);
   const [activeStep, setActiveStep] = useState(1);
+  const [showFullPreview, setShowFullPreview] = useState(false);
 
-  // ✅ NEW: ref untuk PDF
-  const previewRef = useRef<HTMLDivElement>(null);
+  // ✅ Ref untuk PDF
+  const fullCvRef = useRef<HTMLDivElement>(null);
+  if (!fullCvRef || fullCvRef === null) {
+    return;
+  }
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("resumeDataDraft", JSON.stringify(resumeData));
+    }
+  }, [resumeData]);
 
   const ActiveStepComponent = STEPS.find(
     (step) => step.id === activeStep
   )?.component;
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="xl:w-xl bg-primary p-6 flex flex-col justify-between hidden md:flex">
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold border-b pb-2 border-gray-700">
-            Editor CV
-          </h2>
-
-          <div className="space-y-3">
-            {STEPS.map((step) => (
-              <div
-                key={step.id}
-                className={`flex items-center space-x-3 cursor-pointer p-2 rounded-md transition-all duration-200 ${
-                  activeStep === step.id
-                    ? "bg-blue-600 font-semibold"
-                    : ""
-                }`}
-                onClick={() => setActiveStep(step.id)}
-              >
-                <div
-                  className={`h-6 w-6 rounded-full flex items-center justify-center text-sm ${
-                    activeStep === step.id
-                      ? "bg-white text-blue-600"
-                      : "bg-gray-600"
-                  }`}
-                >
-                  {step.id}
-                </div>
-                <span>{step.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+    <div className="flex h-screen overflow-hidden ">
+      <div className=" ">
+        <EditorSidebar
+          STEPS={STEPS}
+          activeStep={activeStep}
+          setActiveStep={setActiveStep}
+        />
       </div>
 
-      <div className="w-full  border-r bg-white overflow-y-auto">
+      <div className="w-full border-r bg-white overflow-y-auto">
         <div className="p-4 bg-gray-50 border-b">
           <h1 className="text-xl font-bold">
             Langkah {activeStep}:{" "}
@@ -309,49 +153,117 @@ const EditorPage: React.FC = () => {
         </div>
 
         {ActiveStepComponent && (
-          <ActiveStepComponent
-            data={resumeData}
-            setData={setResumeData}
-          />
+          <ActiveStepComponent data={resumeData} setData={setResumeData} />
         )}
 
         <div className="p-6 flex justify-between border-t">
-          <Button
-            onClick={() => setActiveStep((prev) => Math.max(1, prev - 1))}
-            disabled={activeStep === 1}
-            variant="outline"
-          >
-            Back
-          </Button>
-
           <div className="flex gap-3">
+            <Button
+              onClick={() =>
+                setActiveStep((prev) => Math.min(STEPS.length, prev - 1))
+              }
+              disabled={activeStep === 1}>
+              Kembali
+            </Button>
             <Button
               onClick={() =>
                 setActiveStep((prev) => Math.min(STEPS.length, prev + 1))
               }
-              disabled={activeStep === STEPS.length}
-            >
-              Continue
+              disabled={activeStep === STEPS.length}>
+              Selanjutnya
             </Button>
 
-            {/* ✅ NEW: Tombol Download PDF */}
+            {/* Tombol Preview Full */}
             <Button
-              onClick={() => downloadPDF(previewRef)}
-              className="flex gap-2 bg-blue-600 text-white"
-            >
-              <FileDown size={18} />
-              Download CV
+              onClick={() => setShowFullPreview(true)}
+              className="flex gap-2  text-white">
+              <Eye size={18} />
+              Preview CV
             </Button>
+
+            {/* Tombol Download PDF */}
+            {activeStep === STEPS.length && (
+              <Button
+                onClick={() => downloadPDF(fullCvRef)}
+                className="flex gap-2  text-white ">
+                <FileDown size={18} />
+                Download CV
+              </Button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* PREVIEW dibungkus ref */}
-      <div className="hidden lg:block lg:w-3/5 xl:w-2/3 bg-gray-200">
-        <div ref={previewRef}>
-          <CVPreview data={resumeData} styles={templateStyles} />
+      {/* PREVIEW SIDEBAR - TAMPILAN PROPORSIONAL */}
+      <div className="bg-gray-50 border-l overflow-y-auto">
+        {/* Container untuk preview yang proporsional */}
+        <div className="p-4 md:flex justify-center hidden items-start min-h-[calc(100vh-120px)] overflow-y-auto">
+          <div
+            className="scale-50 origin-top transition-transform duration-300  cursor-pointer"
+            onClick={() => setShowFullPreview(true)}>
+            <CVAts data={resumeData} styles={templateStyles} isPreview={true} />
+          </div>
         </div>
       </div>
+
+      {/* ✅ ELEMEN A4 PENUH YANG DISEMBUNYIKAN - untuk PDF */}
+      <div className="fixed -left-[10000px] top-0">
+        <div ref={fullCvRef}>
+          <CVAts data={resumeData} styles={templateStyles} isPreview={false} />
+        </div>
+      </div>
+
+      {/* ✅ MODAL FULL PREVIEW */}
+      {showFullPreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-0 md:p-4">
+          <div className="bg-white rounded-none md:rounded-xl shadow-2xl w-full md:w-auto max-h-screen md:max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center p-4 border-b bg-gray-50">
+              <h2 className="text-xl font-bold text-gray-800">Preview CV</h2>
+              <Button
+                onClick={() => setShowFullPreview(false)}
+                variant="ghost"
+                size="icon"
+                className="hover:bg-gray-200">
+                <X size={24} />
+              </Button>
+            </div>
+
+            {/* Modal Content - Scrollable */}
+            <div className="overflow-y-auto p-4 bg-gray-100 flex-1">
+              <div className="flex justify-center">
+                <div className="scale-75 sm:scale-90 md:scale-100 lg:scale-90 xl:scale-100 transition-transform duration-300">
+                  <CVAts
+                    data={resumeData}
+                    styles={templateStyles}
+                    isPreview={false}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t bg-gray-50 flex justify-end items-center">
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setShowFullPreview(false)}
+                  variant="outline">
+                  Tutup Preview
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowFullPreview(false);
+                    downloadPDF(fullCvRef);
+                  }}
+                  className="flex gap-2  text-white">
+                  <FileDown size={18} />
+                  Download CV Sekarang
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

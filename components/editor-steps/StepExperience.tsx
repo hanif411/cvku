@@ -1,4 +1,3 @@
-// src/components/editor-steps/StepExperience.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -15,15 +14,13 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { v4 as uuidv4 } from "uuid"; // Pastikan Anda sudah menginstal uuid
+import { v4 as uuidv4 } from "uuid";
 
-// Definisikan props untuk komponen StepExperience
 interface StepExperienceProps {
   data: ResumeData;
   setData: React.Dispatch<React.SetStateAction<ResumeData>>;
 }
 
-// Komponen Input Detail Pengalaman
 interface ExperienceItemEditorProps {
   experience: Experience;
   index: number;
@@ -37,10 +34,8 @@ const ExperienceItemEditor: React.FC<ExperienceItemEditorProps> = ({
   setData,
   onClose,
 }) => {
-  // State lokal untuk item yang sedang diedit (agar tidak langsung memengaruhi state global saat mengetik)
   const [localExp, setLocalExp] = useState<Experience>(experience);
 
-  // Handler untuk input
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -48,17 +43,14 @@ const ExperienceItemEditor: React.FC<ExperienceItemEditorProps> = ({
     setLocalExp((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handler untuk checkbox (Is Current Job)
   const handleCheckboxChange = (checked: boolean) => {
     setLocalExp((prev) => ({
       ...prev,
       isCurrent: checked,
-      // Jika sedang bekerja, endDate dikosongkan
       endDate: checked ? "Present" : prev.endDate,
     }));
   };
 
-  // Handler saat form disimpan
   const handleSave = () => {
     setData((prev) => ({
       ...prev,
@@ -66,7 +58,7 @@ const ExperienceItemEditor: React.FC<ExperienceItemEditorProps> = ({
         i === index ? localExp : exp
       ),
     }));
-    onClose(); // Tutup editor setelah disimpan
+    onClose();
   };
 
   return (
@@ -140,9 +132,7 @@ const ExperienceItemEditor: React.FC<ExperienceItemEditorProps> = ({
         <Button variant="outline" onClick={onClose}>
           Batal
         </Button>
-        <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
-          Simpan Perubahan
-        </Button>
+        <Button onClick={handleSave}>Simpan Perubahan</Button>
       </div>
     </div>
   );
@@ -213,9 +203,7 @@ const StepExperience: React.FC<StepExperienceProps> = ({ data, setData }) => {
         terbaru (atas) ke yang terlama (bawah).
       </p>
 
-      <Button
-        onClick={handleAddExperience}
-        className="w-full bg-green-500 hover:bg-green-600">
+      <Button onClick={handleAddExperience} className="w-full ">
         <PlusCircle className="h-4 w-4 mr-2" /> Tambah Pengalaman Baru
       </Button>
 

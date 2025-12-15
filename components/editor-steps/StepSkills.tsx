@@ -54,8 +54,7 @@ const StepSkills: React.FC<StepSkillsProps> = ({ data, setData }) => {
     <div className="p-6 space-y-6">
       <h2 className="text-3xl font-bold">Keahlian (Skills)</h2>
       <p className="text-gray-500">
-        Tambahkan keahlian teknis dan *soft skill* yang relevan. Pisahkan setiap
-        *skill* dengan menekan tombol **Add** atau **Enter**.
+        Tambahkan keahlian teknis dan *soft skill* yang relevan.
       </p>
 
       {/* Input dan Tombol Tambah */}
@@ -68,11 +67,8 @@ const StepSkills: React.FC<StepSkillsProps> = ({ data, setData }) => {
           onKeyDown={handleKeyDown}
           className="flex-grow"
         />
-        <Button
-          onClick={handleAddSkill}
-          disabled={!skillInput.trim()}
-          className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="h-4 w-4 mr-2" /> Add
+        <Button onClick={handleAddSkill} disabled={!skillInput.trim()}>
+          <Plus className="h-4 w-4 mr-2" /> Tambah
         </Button>
       </div>
 

@@ -1,18 +1,18 @@
 export type Experience = {
-  id: string; // Untuk key di React list
+  id: string;
   jobTitle: string;
   company: string;
   startDate: string;
   endDate: string;
-  description: string; // Bisa menggunakan list bullet points
+  description: string;
   isCurrent: boolean;
 };
 
 export type Education = {
   id: string;
   degree: string;
+  description? : string
   institution: string;
-  city: string;
   startDate: string;
   endDate: string;
 };
@@ -20,7 +20,7 @@ export type Education = {
 export type TemplateStyle = {
   primaryColor: string;
   fontFamily: string;
-  layoutVariant: "classic" | "modern" | "minimalist";
+  layoutVariant: "classic" | "modern" | "ats";
 };
 
 export type ResumeData = {
@@ -42,7 +42,7 @@ export type certifications = {
   resume_id: number;
   name: string;
   issuer: string;
-  issue_date: number;
-  expiration_date: number;
+  issue_date: number | null;
+  expiration_date: number | null;
   description: string;
 };

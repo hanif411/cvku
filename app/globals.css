@@ -36,9 +36,6 @@
   --sidebar-accent-foreground: oklch(0.3772 0.0619 212.664);
   --sidebar-border: oklch(0.8931 0.0205 204.4136);
   --sidebar-ring: oklch(0.5624 0.0947 203.2755);
-  --font-sans: Courier New, monospace;
-  --font-serif: Courier New, monospace;
-  --font-mono: Courier New, monospace;
   --radius: 0.125rem;
   --shadow-x: 1px;
   --shadow-y: 1px;
@@ -95,10 +92,7 @@
   --sidebar-accent: oklch(0.3775 0.0564 216.501);
   --sidebar-accent-foreground: oklch(0.852 0.1269 195.0354);
   --sidebar-border: oklch(0.3775 0.0564 216.501);
-  --sidebar-ring: oklch(0.852 0.1269 195.0354);
-  --font-sans: Source Code Pro, monospace;
-  --font-serif: Source Code Pro, monospace;
-  --font-mono: Source Code Pro, monospace;
+  --sidebar-ring: oklch(0.852 0.1269 195.0354); 
   --radius: 0.125rem;
   --shadow-x: 1px;
   --shadow-y: 1px;
@@ -172,6 +166,21 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+}
+
+.preview-container:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Memastikan A4 container terlihat baik di preview */
+#cv-a4-container {
+  box-sizing: border-box;
+}
+
+/* Untuk PDF export (opsional) */
+.pdf-export {
+  box-shadow: none !important;
+  border: none !important;
 }
 
 @layer base {

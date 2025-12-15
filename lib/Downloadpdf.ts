@@ -1,26 +1,55 @@
+// src/lib/Downloadpdf.ts
 import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
-export const downloadPDF = async (previewRef: any) => {
-  if (!previewRef.current) return;
+export const downloadPDF = async (
+  fullCvRef: React.RefObject<HTMLDivElement>
+) => {
+  if (!fullCvRef.current) {
+    console.error("Full CV ref not found");
+    return;
+  }
 
-  const node = previewRef.current;
+  // Temukan container A4 di dalam ref
+  const cvNode = fullCvRef.current.querySelector(
+    "#cv-a4-container"
+  ) as HTMLElement;
 
-  const dataUrl = await htmlToImage.toPng(node, {
-    cacheBust: true,
-    pixelRatio: 2, // high quality
-  });
+  if (!cvNode) {
+    console.error("CV A4 container not found for PDF capture");
+    return;
+  }
 
-  const img = new Image();
-  img.src = dataUrl;
+  try {
+    // Tambahkan kelas khusus untuk PDF (opsional)
+    cvNode.classList.add("pdf-export");
 
-  img.onload = () => {
-    const pdf = new jsPDF("p", "mm", "a4");
+    // Capture dengan kualitas tinggi
+    const dataUrl = await htmlToImage.toPng(cvNode, {
+      quality: 1.0,
+      pixelRatio: 3,
+      backgroundColor: "#ffffff",
+      cacheBust: true,
+    });
+
+    // Hapus kelas setelah capture
+    cvNode.classList.remove("pdf-export");
+
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
 
     const pdfWidth = 210;
-    const pdfHeight = (img.height * pdfWidth) / img.width;
+    const pdfHeight = 297;
 
-    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("CV.pdf");
-  };
+    // Tambahkan gambar ke PDF
+    pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+    // Simpan file
+    pdf.save("CV_Professional.pdf");
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+  }
 };

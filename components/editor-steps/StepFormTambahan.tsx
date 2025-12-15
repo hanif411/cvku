@@ -4,7 +4,13 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PlusCircle, Trash2, Edit2, ChevronUp, ChevronDown } from "lucide-react";
+import {
+  PlusCircle,
+  Trash2,
+  Edit2,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import { certifications } from "@/types/index";
 
 interface Props {
@@ -26,7 +32,10 @@ const CertificationEditor: React.FC<{
 }> = ({ item, index, data, setData, onClose }) => {
   const [localItem, setLocalItem] = useState(item);
 
-  const handleChange = (field: keyof certifications, value: string | number) => {
+  const handleChange = (
+    field: keyof certifications,
+    value: string | number
+  ) => {
     setLocalItem({ ...localItem, [field]: value });
   };
 
@@ -57,17 +66,17 @@ const CertificationEditor: React.FC<{
         <div className="space-y-2">
           <Label>Tanggal Terbit</Label>
           <Input
-            type="number"
-            value={localItem.issue_date}
+            value={localItem.issue_date!}
             onChange={(e) => handleChange("issue_date", Number(e.target.value))}
           />
         </div>
         <div className="space-y-2">
           <Label>Tanggal Expired (Opsional)</Label>
           <Input
-            type="number"
-            value={localItem.expiration_date}
-            onChange={(e) => handleChange("expiration_date", Number(e.target.value))}
+            value={localItem.expiration_date!}
+            onChange={(e) =>
+              handleChange("expiration_date", Number(e.target.value))
+            }
           />
         </div>
         <div className="space-y-2 col-span-2">
@@ -84,7 +93,9 @@ const CertificationEditor: React.FC<{
         <Button variant="outline" onClick={onClose}>
           Batal
         </Button>
-        <Button className="bg-purple-600 hover:bg-purple-700" onClick={handleSave}>
+        <Button
+          className="bg-purple-600 hover:bg-purple-700"
+          onClick={handleSave}>
           Simpan
         </Button>
       </div>
@@ -104,8 +115,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
       resume_id: 0,
       name: "",
       issuer: "",
-      issue_date: 0,
-      expiration_date: 0,
+      issue_date: null,
+      expiration_date: null,
       description: "",
     };
     setData([...data, newItem]);
@@ -136,19 +147,20 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
         Tambahkan sertifikasi atau lisensi profesional yang kamu miliki.
       </p>
 
-      <Button
-        onClick={addItem}
-        className="flex items-center gap-2 w-full bg-purple-600 hover:bg-purple-700"
-      >
+      <Button onClick={addItem} className="flex items-center gap-2 w-full">
         <PlusCircle size={16} /> Tambah Sertifikasi
       </Button>
 
       <div className="space-y-4">
         {data.map((item, index) => (
-          <div key={item.id} className="p-4 border rounded-lg bg-white shadow-sm">
+          <div
+            key={item.id}
+            className="p-4 border rounded-lg bg-white shadow-sm">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="font-bold">{item.name || "Sertifikasi Tanpa Nama"}</h3>
+                <h3 className="font-bold">
+                  {item.name || "Sertifikasi Tanpa Nama"}
+                </h3>
                 <p className="text-sm text-gray-600">{item.issuer}</p>
                 <p className="text-xs text-gray-400 mt-1">
                   {item.issue_date} - {item.expiration_date || "Saat ini"}
@@ -162,8 +174,7 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                     size="icon"
                     onClick={() => moveItem(index, "up")}
                     disabled={index === 0}
-                    className="h-7 w-7"
-                  >
+                    className="h-7 w-7">
                     <ChevronUp className="h-4 w-4" />
                   </Button>
                   <Button
@@ -171,8 +182,7 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                     size="icon"
                     onClick={() => moveItem(index, "down")}
                     disabled={index === data.length - 1}
-                    className="h-7 w-7"
-                  >
+                    className="h-7 w-7">
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </div>
@@ -180,18 +190,22 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => setEditingIndex(editingIndex === index ? null : index)}
-                  className="h-12 w-12"
-                >
-                  {editingIndex === index ? <ChevronUp className="h-4 w-4" /> : <Edit2 className="h-4 w-4" />}
+                  onClick={() =>
+                    setEditingIndex(editingIndex === index ? null : index)
+                  }
+                  className="h-12 w-12">
+                  {editingIndex === index ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <Edit2 className="h-4 w-4" />
+                  )}
                 </Button>
 
                 <Button
                   variant="destructive"
                   size="icon"
                   className="h-12 w-12"
-                  onClick={() => removeItem(index)}
-                >
+                  onClick={() => removeItem(index)}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
@@ -209,7 +223,6 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
           </div>
         ))}
       </div>
-
     </div>
   );
 };

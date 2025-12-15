@@ -17,20 +17,19 @@ const templates: Template[] = [
     id: "creative",
     name: "Template Kreatif",
     description: "Desain modern & menarik, ideal untuk industri kreatif.",
-    image: "/Cvats.png",
+    image: "/CvMinimalis.png",
   },
   {
     id: "professional",
     name: "Template Profesional",
     description: "Klasik & rapi, cocok untuk karir korporat.",
     image: "/Cv.png",
-    
   },
   {
-    id: "minimalist",
-    name: "Template Minimalis",
-    description: "Bersih & fokus, menonjolkan esensi terbaik Anda.",
-    image: "/CvMinimalis.png",
+    id: "ats",
+    name: "Template ATS",
+    description: "Bersih & mudah saat screening cv oleh HRD",
+    image: "/Cvats.png",
   },
 ];
 
@@ -58,14 +57,15 @@ const TemplatesPage: React.FC = () => {
             <Card
               key={template.id}
               className="flex flex-col h-full shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-            <CardHeader className="p-0">
-              <div className="w-full h-80 overflow-hidden border-b border-gray-200">
-                <img
-                  src={template.image}
-                  alt={template.name}
-                  className="w-full h-full object-cover object-top"/>
-              </div>
-            </CardHeader>
+              <CardHeader className="p-0">
+                <div className="w-full h-80 overflow-hidden border-b border-gray-200">
+                  <img
+                    src={template.image}
+                    alt={template.name}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+              </CardHeader>
 
               <CardContent className="flex-grow pt-4">
                 <CardTitle className="text-xl font-semibold mb-2">

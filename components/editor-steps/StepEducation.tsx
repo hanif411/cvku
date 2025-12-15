@@ -1,4 +1,3 @@
-// src/components/editor-steps/StepEducation.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -15,9 +14,6 @@ import {
 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
-// =======================================================
-// 1. KOMPONEN EDITOR DETAIL (Internal Component)
-// =======================================================
 interface EducationItemEditorProps {
   education: Education;
   index: number;
@@ -31,23 +27,19 @@ const EducationItemEditor: React.FC<EducationItemEditorProps> = ({
   setData,
   onClose,
 }) => {
-  // State lokal untuk item yang sedang diedit
   const [localEdu, setLocalEdu] = useState<Education>(education);
 
-  // Handler untuk input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLocalEdu((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handler saat form disimpan
   const handleSave = () => {
     setData((prev) => ({
       ...prev,
-      // Update array education di indeks yang benar
       education: prev.education.map((edu, i) => (i === index ? localEdu : edu)),
     }));
-    onClose(); // Tutup editor setelah disimpan
+    onClose();
   };
 
   return (
@@ -76,15 +68,6 @@ const EducationItemEditor: React.FC<EducationItemEditorProps> = ({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor={`city-${index}`}>Kota</Label>
-          <Input
-            id={`city-${index}`}
-            name="city"
-            value={localEdu.city}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="space-y-2">
           <Label htmlFor={`startDate-${index}`}>Mulai (Tahun)</Label>
           <Input
             id={`startDate-${index}`}
@@ -93,7 +76,7 @@ const EducationItemEditor: React.FC<EducationItemEditorProps> = ({
             onChange={handleInputChange}
           />
         </div>
-        <div className="space-y-2 col-span-2">
+        <div className="space-y-2">
           <Label htmlFor={`endDate-${index}`}>Selesai (Tahun/Lulus)</Label>
           <Input
             id={`endDate-${index}`}
@@ -109,11 +92,7 @@ const EducationItemEditor: React.FC<EducationItemEditorProps> = ({
         <Button variant="outline" onClick={onClose}>
           Batal
         </Button>
-        <Button
-          onClick={handleSave}
-          className="bg-purple-600 hover:bg-purple-700">
-          Simpan Pendidikan
-        </Button>
+        <Button onClick={handleSave}>Simpan Pendidikan</Button>
       </div>
     </div>
   );
@@ -134,9 +113,8 @@ const StepEducation: React.FC<StepEducationProps> = ({ data, setData }) => {
   const handleAddEducation = () => {
     const newEdu: Education = {
       id: uuidv4(),
-      degree: "Gelar Baru",
-      institution: "Universitas/Sekolah Baru",
-      city: "",
+      degree: "",
+      institution: "",
       startDate: "",
       endDate: "",
     };
@@ -187,9 +165,7 @@ const StepEducation: React.FC<StepEducationProps> = ({ data, setData }) => {
         terbaru.
       </p>
 
-      <Button
-        onClick={handleAddEducation}
-        className="w-full bg-purple-600 hover:bg-purple-700">
+      <Button onClick={handleAddEducation} className="w-full ">
         <PlusCircle className="h-4 w-4 mr-2" /> Tambah Pendidikan
       </Button>
 
