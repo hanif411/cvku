@@ -13,8 +13,17 @@ import StepCertifications from "@/components/editor-steps/StepFormTambahan";
 
 import { downloadPDF } from "@/lib/Downloadpdf";
 import EditorSidebar from "@/components/editor/Sidebar";
+
+/* TEMPLATE */
 import { CVAts } from "@/components/templates-cv/CvAts";
-// import { CVAts } from "@/components/templates-cv/CvProfessional";
+import { CVProfessional } from "@/components/templates-cv/CvProfessional";
+
+/* ======================= */
+/* ✅ TAMBAHAN (LOGIC FOTO) */
+/* ======================= */
+const templateUsePhoto = (templateId: string | null) => {
+  return templateId === "professional";
+};
 
 const STEPS = [
   {
@@ -23,6 +32,7 @@ const STEPS = [
     component: (props: {
       data: ResumeData;
       setData: React.Dispatch<React.SetStateAction<ResumeData>>;
+      useProfilePhoto: boolean; // ✅ TAMBAHAN
     }) => <StepPersonalInfo {...props} />,
   },
   {
@@ -61,12 +71,8 @@ const STEPS = [
         setData={(newCerts) =>
           props.setData((prev) => ({ ...prev, certifications: newCerts }))
         }
-        onNext={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        onBack={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        onNext={() => {}}
+        onBack={() => {}}
       />
     ),
   },
@@ -94,13 +100,11 @@ const initialTemplateStyle: TemplateStyle = {
 
 const getInitialData = (): ResumeData => {
   if (typeof window !== "undefined") {
-    // Pastikan kode berjalan di client-side
     const savedData = localStorage.getItem("resumeDataDraft");
     if (savedData) {
       try {
-        return JSON.parse(savedData) as ResumeData;
-      } catch (error) {
-        console.error("Error parsing resume data from localStorage:", error); // Jika gagal parse, kembalikan data default
+        return JSON.parse(savedData);
+      } catch {
         return defaultResumeData;
       }
     }
@@ -110,39 +114,34 @@ const getInitialData = (): ResumeData => {
 
 const EditorPage: React.FC = () => {
   const searchParams = useSearchParams();
-  const templateId = searchParams.get("template") || "default";
+  const templateId = searchParams.get("template");
 
   const [resumeData, setResumeData] = useState<ResumeData>(getInitialData);
-  const [templateStyles, setTemplateStyles] =
+  const [templateStyles] =
     useState<TemplateStyle>(initialTemplateStyle);
   const [activeStep, setActiveStep] = useState(1);
   const [showFullPreview, setShowFullPreview] = useState(false);
 
-  // ✅ Ref untuk PDF
   const fullCvRef = useRef<HTMLDivElement>(null);
-  if (!fullCvRef || fullCvRef === null) {
-    return;
-  }
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("resumeDataDraft", JSON.stringify(resumeData));
-    }
+    localStorage.setItem("resumeDataDraft", JSON.stringify(resumeData));
   }, [resumeData]);
 
   const ActiveStepComponent = STEPS.find(
     (step) => step.id === activeStep
   )?.component;
 
+  /* ✅ TAMBAHAN */
+  const useProfilePhoto = templateUsePhoto(templateId);
+
   return (
     <div className="flex h-screen overflow-hidden ">
-      <div className=" ">
-        <EditorSidebar
-          STEPS={STEPS}
-          activeStep={activeStep}
-          setActiveStep={setActiveStep}
-        />
-      </div>
+      <EditorSidebar
+        STEPS={STEPS}
+        activeStep={activeStep}
+        setActiveStep={setActiveStep}
+      />
 
       <div className="w-full border-r bg-white overflow-y-auto">
         <div className="p-4 bg-gray-50 border-b">
@@ -153,7 +152,12 @@ const EditorPage: React.FC = () => {
         </div>
 
         {ActiveStepComponent && (
-          <ActiveStepComponent data={resumeData} setData={setResumeData} />
+          <ActiveStepComponent
+            data={resumeData}
+            setData={setResumeData}
+            /* ✅ TAMBAHAN */
+            useProfilePhoto={useProfilePhoto}
+          />
         )}
 
         <div className="p-6 flex justify-between border-t">
@@ -173,76 +177,95 @@ const EditorPage: React.FC = () => {
               Selanjutnya
             </Button>
 
-            {/* Tombol Preview Full */}
-            <Button
-              onClick={() => setShowFullPreview(true)}
-              className="flex gap-2  text-white">
-              <Eye size={18} />
-              Preview CV
+            <Button onClick={() => setShowFullPreview(true)}>
+              <Eye size={18} /> Preview CV
             </Button>
 
-            {/* Tombol Download PDF */}
             {activeStep === STEPS.length && (
-              <Button
-                onClick={() => downloadPDF(fullCvRef)}
-                className="flex gap-2  text-white ">
-                <FileDown size={18} />
-                Download CV
+              <Button onClick={() => downloadPDF(fullCvRef)}>
+                <FileDown size={18} /> Download CV
               </Button>
             )}
           </div>
         </div>
       </div>
 
-      {/* PREVIEW SIDEBAR - TAMPILAN PROPORSIONAL */}
+      {/* PREVIEW SIDEBAR (TIDAK DIUBAH) */}
       <div className="bg-gray-50 border-l overflow-y-auto">
-        {/* Container untuk preview yang proporsional */}
         <div className="p-4 md:flex justify-center hidden items-start min-h-[calc(100vh-120px)] overflow-y-auto">
           <div
-            className="scale-50 origin-top transition-transform duration-300  cursor-pointer"
+            className="scale-50 origin-top transition-transform duration-300 cursor-pointer"
             onClick={() => setShowFullPreview(true)}>
-            <CVAts data={resumeData} styles={templateStyles} isPreview={true} />
+            {templateId === "professional" ? (
+              <CVProfessional
+                data={resumeData}
+                styles={templateStyles}
+                isPreview={true}
+              />
+            ) : (
+              <CVAts
+                data={resumeData}
+                styles={templateStyles}
+                isPreview={true}
+              />
+            )}
           </div>
         </div>
       </div>
 
-      {/* ✅ ELEMEN A4 PENUH YANG DISEMBUNYIKAN - untuk PDF */}
+      {/* PDF (TIDAK DIUBAH) */}
       <div className="fixed -left-[10000px] top-0">
         <div ref={fullCvRef}>
-          <CVAts data={resumeData} styles={templateStyles} isPreview={false} />
+          {templateId === "professional" ? (
+            <CVProfessional
+              data={resumeData}
+              styles={templateStyles}
+              isPreview={false}
+            />
+          ) : (
+            <CVAts
+              data={resumeData}
+              styles={templateStyles}
+              isPreview={false}
+            />
+          )}
         </div>
       </div>
 
-      {/* ✅ MODAL FULL PREVIEW */}
+      {/* MODAL (TIDAK DIUBAH) */}
       {showFullPreview && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm p-0 md:p-4">
           <div className="bg-white rounded-none md:rounded-xl shadow-2xl w-full md:w-auto max-h-screen md:max-h-[90vh] overflow-hidden flex flex-col">
-            {/* Modal Header */}
             <div className="flex justify-between items-center p-4 border-b bg-gray-50">
               <h2 className="text-xl font-bold text-gray-800">Preview CV</h2>
               <Button
                 onClick={() => setShowFullPreview(false)}
                 variant="ghost"
-                size="icon"
-                className="hover:bg-gray-200">
+                size="icon">
                 <X size={24} />
               </Button>
             </div>
 
-            {/* Modal Content - Scrollable */}
             <div className="overflow-y-auto p-4 bg-gray-100 flex-1">
               <div className="flex justify-center">
                 <div className="scale-75 sm:scale-90 md:scale-100 lg:scale-90 xl:scale-100 transition-transform duration-300">
-                  <CVAts
-                    data={resumeData}
-                    styles={templateStyles}
-                    isPreview={false}
-                  />
+                  {templateId === "professional" ? (
+                    <CVProfessional
+                      data={resumeData}
+                      styles={templateStyles}
+                      isPreview={false}
+                    />
+                  ) : (
+                    <CVAts
+                      data={resumeData}
+                      styles={templateStyles}
+                      isPreview={false}
+                    />
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="p-4 border-t bg-gray-50 flex justify-end items-center">
               <div className="flex gap-3">
                 <Button
@@ -254,10 +277,8 @@ const EditorPage: React.FC = () => {
                   onClick={() => {
                     setShowFullPreview(false);
                     downloadPDF(fullCvRef);
-                  }}
-                  className="flex gap-2  text-white">
-                  <FileDown size={18} />
-                  Download CV Sekarang
+                  }}>
+                  <FileDown size={18} /> Download CV Sekarang
                 </Button>
               </div>
             </div>

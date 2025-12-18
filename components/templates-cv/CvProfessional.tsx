@@ -1,3 +1,4 @@
+//cvku/componenponents/templates-cv/Cvprofesional
 "use client";
 import React from "react";
 import { ResumeData, TemplateStyle } from "@/types";
@@ -22,19 +23,33 @@ export const CVProfessional: React.FC<{
         className="w-[210mm] min-h-[297mm] bg-white p-12"
         style={previewStyle}
         id="cv-a4-container">
+
         {/* HEADER SECTION - Name & Title */}
-        <div className="mb-10">
-          <h1
-            className="text-4xl font-bold mb-3 tracking-tight text-gray-900"
-            style={{ color: styles.primaryColor }}>
-            {data.personalInfo.name || "Full Name"}
-          </h1>
-          <div
-            className="h-1 w-20 mb-6"
-            style={{ backgroundColor: styles.primaryColor }}></div>
-          <h2 className="text-2xl font-semibold text-gray-800">
-            {data.personalInfo.title || "Professional Title"}
-          </h2>
+        <div className="mb-10 flex items-start gap-6">
+          
+          {/* ===== TAMBAHAN FOTO (TIDAK MENGUBAH HEADER ASLI) ===== */}
+          {data.personalInfo.photo && (
+            <img
+              src={data.personalInfo.photo}
+              alt="Profile"
+              className="w-28 h-28 object-cover border border-gray-300"
+            />
+          )}
+          {/* ===== END TAMBAHAN FOTO ===== */}
+
+          <div>
+            <h1
+              className="text-4xl font-bold mb-3 tracking-tight text-gray-900"
+              style={{ color: styles.primaryColor }}>
+              {data.personalInfo.name || "Full Name"}
+            </h1>
+            <div
+              className="h-1 w-20 mb-6"
+              style={{ backgroundColor: styles.primaryColor }}></div>
+            <h2 className="text-2xl font-semibold text-gray-800">
+              {data.personalInfo.title || "Professional Title"}
+            </h2>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-12">
@@ -52,7 +67,6 @@ export const CVProfessional: React.FC<{
                 {data.personalInfo.email && (
                   <div>{data.personalInfo.email}</div>
                 )}
-                {/* Alamat bisa ditambahkan jika ada */}
               </div>
             </section>
 
@@ -118,7 +132,7 @@ export const CVProfessional: React.FC<{
               </h3>
               <p className="text-gray-700 leading-relaxed">
                 {data.personalInfo.summary ||
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
               </p>
             </section>
 
@@ -200,38 +214,6 @@ export const CVProfessional: React.FC<{
               </section>
             )}
 
-            {/* REFERENCES SECTION */}
-            <section>
-              <h3 className="text-lg font-bold mb-4 uppercase tracking-wider text-gray-800">
-                References
-              </h3>
-              <div className="space-y-4">
-                {/* Reference 1 */}
-                <div>
-                  <div className="font-bold text-gray-900">
-                    Harumi Kobayashi
-                  </div>
-                  <div className="text-sm text-gray-700">
-                    Wardiere Inc. / CEO
-                  </div>
-                  <div className="text-xs text-gray-600">
-                    <div>Phone: 123-456-7890</div>
-                    <div>Email: hello@reallygreatsite.com</div>
-                  </div>
-                </div>
-                {/* Reference 2 */}
-                <div>
-                  <div className="font-bold text-gray-900">Bailey Dupont</div>
-                  <div className="text-sm text-gray-700">
-                    Wardiere Inc. / CEO
-                  </div>
-                  <div className="text-xs text-gray-600">
-                    <div>Phone: 123-456-7890</div>
-                    <div>Email: hello@reallygreatsite.com</div>
-                  </div>
-                </div>
-              </div>
-            </section>
           </div>
         </div>
       </div>

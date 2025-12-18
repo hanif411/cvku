@@ -30,13 +30,16 @@ const CertificationEditor: React.FC<{
   setData: (value: certifications[]) => void;
   onClose: () => void;
 }> = ({ item, index, data, setData, onClose }) => {
-  const [localItem, setLocalItem] = useState(item);
+  const [localItem, setLocalItem] = useState<certifications>(item);
 
   const handleChange = (
     field: keyof certifications,
-    value: string | number
+    value: string | number | null
   ) => {
-    setLocalItem({ ...localItem, [field]: value });
+    setLocalItem((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const handleSave = () => {
@@ -52,39 +55,53 @@ const CertificationEditor: React.FC<{
         <div className="space-y-2">
           <Label>Nama Sertifikasi</Label>
           <Input
-            value={localItem.name}
+            value={localItem.name ?? ""}
             onChange={(e) => handleChange("name", e.target.value)}
           />
         </div>
+
         <div className="space-y-2">
           <Label>Penerbit</Label>
           <Input
-            value={localItem.issuer}
+            value={localItem.issuer ?? ""}
             onChange={(e) => handleChange("issuer", e.target.value)}
           />
         </div>
+
         <div className="space-y-2">
           <Label>Tanggal Terbit</Label>
           <Input
-            value={localItem.issue_date!}
-            onChange={(e) => handleChange("issue_date", Number(e.target.value))}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Tanggal Expired (Opsional)</Label>
-          <Input
-            value={localItem.expiration_date!}
+            type="number"
+            value={localItem.issue_date ?? ""}
             onChange={(e) =>
-              handleChange("expiration_date", Number(e.target.value))
+              handleChange(
+                "issue_date",
+                e.target.value === "" ? null : Number(e.target.value)
+              )
             }
           />
         </div>
+
+        <div className="space-y-2">
+          <Label>Tanggal Expired (Opsional)</Label>
+          <Input
+            type="number"
+            value={localItem.expiration_date ?? ""}
+            onChange={(e) =>
+              handleChange(
+                "expiration_date",
+                e.target.value === "" ? null : Number(e.target.value)
+              )
+            }
+          />
+        </div>
+
         <div className="space-y-2 col-span-2">
           <Label>Deskripsi</Label>
           <textarea
-            value={localItem.description}
+            value={localItem.description ?? ""}
             onChange={(e) => handleChange("description", e.target.value)}
-            className="w-full p-2 rounded  border"
+            className="w-full p-2 rounded border"
           />
         </div>
       </div>
@@ -95,7 +112,8 @@ const CertificationEditor: React.FC<{
         </Button>
         <Button
           className="bg-purple-600 hover:bg-purple-700"
-          onClick={handleSave}>
+          onClick={handleSave}
+        >
           Simpan
         </Button>
       </div>
@@ -120,7 +138,7 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
       description: "",
     };
     setData([...data, newItem]);
-    setEditingIndex(data.length); // langsung edit
+    setEditingIndex(data.length);
   };
 
   const removeItem = (index: number) => {
@@ -155,7 +173,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
         {data.map((item, index) => (
           <div
             key={item.id}
-            className="p-4 border rounded-lg bg-white shadow-sm">
+            className="p-4 border rounded-lg bg-white shadow-sm"
+          >
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="font-bold">
@@ -163,7 +182,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                 </h3>
                 <p className="text-sm text-gray-600">{item.issuer}</p>
                 <p className="text-xs text-gray-400 mt-1">
-                  {item.issue_date} - {item.expiration_date || "Saat ini"}
+                  {item.issue_date ?? "-"} —{" "}
+                  {item.expiration_date ?? "Saat ini"}
                 </p>
               </div>
 
@@ -174,7 +194,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                     size="icon"
                     onClick={() => moveItem(index, "up")}
                     disabled={index === 0}
-                    className="h-7 w-7">
+                    className="h-7 w-7"
+                  >
                     <ChevronUp className="h-4 w-4" />
                   </Button>
                   <Button
@@ -182,7 +203,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                     size="icon"
                     onClick={() => moveItem(index, "down")}
                     disabled={index === data.length - 1}
-                    className="h-7 w-7">
+                    className="h-7 w-7"
+                  >
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </div>
@@ -193,7 +215,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                   onClick={() =>
                     setEditingIndex(editingIndex === index ? null : index)
                   }
-                  className="h-12 w-12">
+                  className="h-12 w-12"
+                >
                   {editingIndex === index ? (
                     <ChevronUp className="h-4 w-4" />
                   ) : (
@@ -205,7 +228,8 @@ const StepCertifications: React.FC<Props> = ({ data, setData }) => {
                   variant="destructive"
                   size="icon"
                   className="h-12 w-12"
-                  onClick={() => removeItem(index)}>
+                  onClick={() => removeItem(index)}
+                >
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
