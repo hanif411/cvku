@@ -3,7 +3,7 @@ import * as htmlToImage from "html-to-image";
 import jsPDF from "jspdf";
 
 export const downloadPDF = async (
-  fullCvRef: React.RefObject<HTMLDivElement>
+  fullCvRef: React.RefObject<HTMLDivElement | null>
 ) => {
   if (!fullCvRef.current) {
     console.error("Full CV ref not found");

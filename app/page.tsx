@@ -14,17 +14,16 @@ export default function LandingPage() {
       <header className="flex flex-col items-center text-center py-16 md:py-24 px-6 flex-grow">
         <div className="max-w-4xl">
           <h2 className="text-5xl md:text-6xl font-extrabold mb-4 text-gray-900 leading-tight">
-            Build Your <span className="text-green-500">Professional CV</span>{" "}
-            in Minutes
+            Buat <span className="text-green-500">Professional CV</span> kamu
+            dalam hitungan menit
           </h2>
           <p className="text-xl md:text-2xl mb-8 text-gray-600">
-            Choose from modern, industry-approved templates and land your dream
-            job with ease.
+            Mulai dari modern templates hingga templates CV ATS
           </p>
           <Button
             size="lg"
             className=" text-lg py-3 px-8 transition-all duration-300 shadow-lg shadow-red-200">
-            <Link href="/templates">Start Building Your CV Now</Link>
+            <Link href="/templates">Mulai buat Cv sekarang</Link>
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
